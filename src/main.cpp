@@ -1,9 +1,8 @@
-#include "render/textures.hpp"
+#include "render/Boardrender.hpp"
+#include "Engine/BoardTypes.hpp"
 
 #include <iostream>
 
-const Color Whitesquare = Color{244,210,156,255};
-const Color Blacksquare = Color{187,117,71,255};
 
 int main() {
 
@@ -17,8 +16,6 @@ int main() {
   window.SetFullscreen(true);
 
   SetTargetFPS(60);
-
-  GenDefaultTexture();
 
   while (!window.ShouldClose()) {
     //float deltatime = GetFrameTime();
