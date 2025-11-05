@@ -25,16 +25,16 @@ enum class PieceFlag {
 };
 
 enum class MoveFlag {
-  Promotion = 0b1 << 16,
-  Capture = 0b1 << 15,
-  Special1 = 0b1 << 14,
-  Special2 = 0b1 << 13,
+  Promotion = 0b1 << 15,
+  Capture = 0b1 << 14,
+  Special1 = 0b1 << 13,
+  Special2 = 0b1 << 12,
 };
 
 inline uint8_t to_uint8(PieceType type) { return static_cast<uint8_t>(type); }
 inline uint8_t to_uint8(PieceColor color) { return static_cast<uint8_t>(color); }
 inline uint8_t to_uint8(PieceFlag flag) { return static_cast<uint8_t>(flag); }
-inline uint8_t to_uint8(MoveFlag flag) { return static_cast<uint8_t>(flag); }
+inline uint8_t to_uint16(MoveFlag flag) { return static_cast<uint16_t>(flag); }
 
 class Piece { 
   uint8_t data;
@@ -51,10 +51,6 @@ public:
   
   void SetCanMove(bool value);
   void SetHighlight(bool value);
-  void SetLastMoved(bool value);
-  void SetHasMoved(bool value);
-  void SetType(PieceType type);
-  void SetColor(PieceColor color);
   void SetFlag(PieceFlag flag);
   
 };
@@ -63,8 +59,22 @@ class Move {
   uint16_t data;
 
 public:
-  Move(uint8_t data) : data(data) {}
-  Move(uint8_t from, uint8_t to, MoveFlag flags) : data(to_uint8(flags) | from << 6 | to) {}
+  Move(uint16_t data) : data(data) {}
+  Move(uint16_t from, uint16_t to, MoveFlag flags) : data(to_uint16(flags) | from << 6 | to) {}
+
+  uint16_t GetFrom();
+  uint16_t GetTo();
+  bool GetSpecial1();
+  bool GetSpecial2();
+  bool GetCapture();
+  bool GetPromotion();
+  
+  void SetFrom(uint8_t idx);
+  void SetTo(uint8_t idx);
+  void SetSpecial1(bool value);
+  void SetSpecial2(bool value);
+  void SetCapture(bool value);
+  void SetPromotion(bool value);
 
 };
 
