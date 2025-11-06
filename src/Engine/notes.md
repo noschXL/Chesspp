@@ -6,3 +6,5 @@
 | lastMoved | hasMoved | canMoveHighlight | selectHighlight | Color | Type |
 
 
+![piece image](../render/assets/pieces.png)
+

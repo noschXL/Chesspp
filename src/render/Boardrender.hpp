@@ -6,7 +6,9 @@
 
 extern const raylib::Color Whitesquare;
 extern const raylib::Color Blacksquare;
+extern const raylib::Texture2D PieceTexture;
 
-void DrawAll();
+void InitPieceTexture(const char* path);
 void DrawBoard(raylib::Rectangle aera);
 void DrawPiece(raylib::Rectangle aera, Piece piece);
+void DrawAll();
