@@ -1,14 +1,12 @@
 #pragma once
 
 #include "../../include/raylib-cpp.hpp"
+#include "../Engine/BoardTypes.hpp"
 
-const raylib::Color Whitesquare;
-const raylib::Color Blacksquare;
 
-class Spritesheet {
-  raylib::Texture image;
-  raylib::Vector2 spritesize;
+extern const raylib::Color Whitesquare;
+extern const raylib::Color Blacksquare;
 
-public:
-  Spritesheet();
-};
+void DrawAll();
+void DrawBoard(raylib::Rectangle aera);
+void DrawPiece(raylib::Rectangle aera, Piece piece);
