@@ -7,4 +7,3 @@
 
 
 ![piece image](../render/assets/pieces.png)
-

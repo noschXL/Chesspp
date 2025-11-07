@@ -8,5 +8,5 @@ void InitPieceTexture(const char* path) {
 }
 
 void DrawPiece(raylib::Rectangle aera, Piece piece) {
-  
+  int fromX = piece.GetType() * PieceTexture.width / 6;  
 }

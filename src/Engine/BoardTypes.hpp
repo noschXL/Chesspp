@@ -3,13 +3,13 @@
 
 
 enum class PieceType : uint8_t{
-  Empty,
-  Pawn,
-  Knight,
-  Bishop,
-  Rook,
+  King,
   Queen,
-  King
+  Bishop,
+  Knight,
+  Rook,
+  Pawn,
+  Empty
 };
 
 enum class PieceColor : uint8_t{
@@ -44,14 +44,11 @@ public:
   Piece(PieceFlag flags, PieceColor color, PieceType type) : data(to_uint8(flags) | to_uint8(color) | to_uint8(type)) {}
 
   
-  uint8_t GetType();
-  uint8_t GetColor();
-  uint8_t GetFlag(PieceFlag flag);
-
+  PieceType GetType();
+  PieceColor GetColor();
+  bool IsFlagSet (PieceFlag flag);
   
-  void SetCanMove(bool value);
-  void SetHighlight(bool value);
-  void SetFlag(PieceFlag flag);
+  void SetFlag(PieceFlag flag, bool value);
   
 };
 
