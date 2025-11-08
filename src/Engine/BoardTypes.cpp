@@ -16,3 +16,8 @@ void Piece::SetFlag(PieceFlag flag, bool value) {
   uint8_t current = Piece::data & to_uint8(flag);
   Piece::data ^= current ^ value;
 }
+
+
+Board::Board() {
+  squares.fill(Piece(0));
+}

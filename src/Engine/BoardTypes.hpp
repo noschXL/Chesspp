@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <array>
 
 
 enum class PieceType : uint8_t{
@@ -18,6 +19,7 @@ enum class PieceColor : uint8_t{
 };
 
 enum class PieceFlag {
+  None = 0,
   Highlight = 0b00010000,
   CanMove   = 0b00100000,
   HasMoved  = 0b01000000,
@@ -40,8 +42,12 @@ class Piece {
   uint8_t data;
   
 public:
-  Piece(uint8_t data) : data(data) {}
-  Piece(PieceFlag flags, PieceColor color, PieceType type) : data(to_uint8(flags) | to_uint8(color) | to_uint8(type)) {}
+  Piece() : data(0) {};
+    Piece(uint8_t data) : data(data) {}
+    Piece(PieceFlag flags, PieceColor color, PieceType type) : data(to_uint8(flags) | to_uint8(color) | to_uint8(type)) {}
+
+    Piece(const Piece&) = default;
+    Piece& operator=(const Piece&) = default;
 
   
   PieceType GetType();
@@ -75,11 +81,11 @@ public:
 
 };
 
-class Board {
-  Piece squares[64];
-  bool Castelrights[4]; //topleft -> bottomright
+struct Board {
+  std::array<Piece, 64> squares;
+  std::array<bool, 4> Castelrights; //topleft -> bottomright
   
-
+  Board();
 
 };
 // look at notes.md
