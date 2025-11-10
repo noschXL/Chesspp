@@ -25,16 +25,14 @@ int main() {
 
   Board board;
   board.squares[0] = Piece(PieceFlag::None, PieceColor::White, PieceType::Queen);
-
+  
   while (!window.ShouldClose()) {
     // float deltatime = GetFrameTime();
     BeginDrawing();
     
     window.ClearBackground(BLACK);
     
-    DrawText("hello", 100, 100, 20, WHITE);
-    
-    DrawAll(window, board);
+    DrawAll(&window, board);
 
 
     EndDrawing();

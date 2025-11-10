@@ -19,5 +19,5 @@ void Piece::SetFlag(PieceFlag flag, bool value) {
 
 
 Board::Board() {
-  squares.fill(Piece(0));
+  squares.fill(Piece(to_uint8(PieceType::Empty)));
 }

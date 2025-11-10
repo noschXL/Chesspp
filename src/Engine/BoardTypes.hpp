@@ -10,7 +10,7 @@ enum class PieceType : uint8_t{
   Knight,
   Rook,
   Pawn,
-  Empty
+  Empty,
 };
 
 enum class PieceColor : uint8_t{
@@ -33,16 +33,16 @@ enum class MoveFlag {
   Special2 = 0b1 << 12,
 };
 
-inline uint8_t to_uint8(PieceType type) { return static_cast<uint8_t>(type); }
-inline uint8_t to_uint8(PieceColor color) { return static_cast<uint8_t>(color); }
-inline uint8_t to_uint8(PieceFlag flag) { return static_cast<uint8_t>(flag); }
+inline uint8_t to_uint8(PieceType type) { return static_cast<uint8_t>(type)&0b00000111; }
+inline uint8_t to_uint8(PieceColor color) { return static_cast<uint8_t>(color)&0b00001000; }
+inline uint8_t to_uint8(PieceFlag flag) { return static_cast<uint8_t>(flag)&0b11110000; }
 inline uint8_t to_uint16(MoveFlag flag) { return static_cast<uint16_t>(flag); }
 
 class Piece { 
   uint8_t data;
   
 public:
-  Piece() : data(0) {};
+  Piece() : data(6) {};
     Piece(uint8_t data) : data(data) {}
     Piece(PieceFlag flags, PieceColor color, PieceType type) : data(to_uint8(flags) | to_uint8(color) | to_uint8(type)) {}
 
