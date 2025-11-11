@@ -42,9 +42,10 @@ class Piece {
   uint8_t data;
   
 public:
-  Piece() : data(6) {};
-    Piece(uint8_t data) : data(data) {}
-    Piece(PieceFlag flags, PieceColor color, PieceType type) : data(to_uint8(flags) | to_uint8(color) | to_uint8(type)) {}
+  Piece() : data(to_uint8(PieceType::Empty)) {};
+  Piece(uint8_t data) : data(data) {}
+  Piece(PieceColor color, PieceType type) : data(to_uint8(color) | to_uint8(type)) {}  
+  Piece(PieceFlag flags, PieceColor color, PieceType type) : data(to_uint8(flags) | to_uint8(color) | to_uint8(type)) {}
 
     Piece(const Piece&) = default;
     Piece& operator=(const Piece&) = default;

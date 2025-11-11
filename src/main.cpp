@@ -1,9 +1,13 @@
 #include "Engine/BoardTypes.hpp"
 #include "render/Renderer.hpp"
+#include "Engine/Fenparser.hpp"
 
-#include "../include/raylib-cpp.hpp"
 #include <iostream>
 #include <filesystem>
+#include <string>
+
+
+const Fenstring startpos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
 
 int main() {
 
@@ -23,7 +27,7 @@ int main() {
   SetTargetFPS(60);
 
 
-  Board board;
+  Board board = to_board(startpos);
   board.squares[0] = Piece(PieceFlag::None, PieceColor::White, PieceType::Queen);
   
   while (!window.ShouldClose()) {
