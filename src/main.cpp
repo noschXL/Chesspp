@@ -1,11 +1,9 @@
 #include "Engine/BoardTypes.hpp"
-#include "render/Renderer.hpp"
+#include "Render/Renderer.hpp"
 #include "Engine/Fenparser.hpp"
 
 #include <iostream>
 #include <filesystem>
-#include <string>
-
 
 const Fenstring startpos = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
 
@@ -26,18 +24,15 @@ int main() {
 
   SetTargetFPS(60);
 
-
   Board board = to_board(startpos);
-  board.squares[0] = Piece(PieceFlag::None, PieceColor::White, PieceType::Queen);
   
   while (!window.ShouldClose()) {
     // float deltatime = GetFrameTime();
     BeginDrawing();
     
-    window.ClearBackground(BLACK);
+    window.ClearBackground(DARKGRAY);
     
     DrawAll(&window, board);
-
 
     EndDrawing();
   }

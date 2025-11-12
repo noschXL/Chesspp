@@ -11,7 +11,6 @@ const raylib::Color Movesquare = {0x306082ff};
 const raylib::Color White = {0xffffffff};
 
 static raylib::Texture2D pieceTexture;
-static raylib::Texture2D* pieceTexturePtr = nullptr;
 bool textureinitialized = false;
 
 int pieceWidth = -1;
@@ -60,7 +59,7 @@ void DrawPiece(int index, raylib::Rectangle boardRect, Piece piece) {
   
   raylib::Rectangle fromRect = {
     float(int(to_uint8(type)) * pieceWidth),
-    float(int((to_uint8(piece.GetColor()))) * pieceHeight),
+    float(int((to_uint8(piece.GetColor()) >> 3)) * pieceHeight),
     float(pieceWidth),
     float(pieceHeight)
   };
