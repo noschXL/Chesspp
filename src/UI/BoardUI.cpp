@@ -4,7 +4,7 @@
 #include "../Render/Boardrender.hpp"
 #include <stdexcept>
 
-static Piece* selectedPiecePtr;
+//static Piece* selectedPiecePtr;
 
 void DrawPieceAt(Piece piece, float x, float y, float width, float height) {
   if (!textureinitialized) {
@@ -35,6 +35,4 @@ void DrawPieceAt(Piece piece, float x, float y, float width, float height) {
 
 
   DrawTexturePro(*pieceTexturePtr, fromRect, drawAera, origin, 0, WHITE);
-}
-
 }

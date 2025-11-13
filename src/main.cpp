@@ -18,7 +18,7 @@ int main() {
   
   raylib::Window window(screenWidth, screenHeight, "raylib-cpp - basic window");
 
-  InitRenderer((cwd / "src/render/assets/pieces.png").string());
+  InitRenderer((cwd / "src/Render/assets/pieces.png").string());
   
   window.SetFullscreen(true);
 

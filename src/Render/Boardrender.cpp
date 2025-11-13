@@ -10,7 +10,8 @@ const raylib::Color Movesquare = {0x306082ff};
 
 const raylib::Color White = {0xffffffff};
 
-static raylib::Texture2D pieceTexture;
+raylib::Texture2D pieceTexture;
+raylib::Texture2D* pieceTexturePtr = nullptr;
 bool textureinitialized = false;
 
 int pieceWidth = -1;

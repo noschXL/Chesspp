@@ -6,7 +6,7 @@
 #include <string>
 
 extern bool textureinitialized; 
-static raylib::Texture2D* pieceTexturePtr = nullptr;
+extern raylib::Texture2D* pieceTexturePtr;
 
 
 void InitPieceTexture(std::string path);
