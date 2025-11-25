@@ -53,6 +53,7 @@ public:
   
   PieceType GetType();
   PieceColor GetColor();
+  bool IsWhite();
   bool IsFlagSet (PieceFlag flag);
   
   void SetFlag(PieceFlag flag, bool value);

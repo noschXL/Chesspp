@@ -12,6 +12,10 @@ bool Piece::IsFlagSet(PieceFlag flag) {
   return (Piece::data & to_uint8(flag)) > 0;
 }
 
+bool Piece::IsWhite() {
+  return Piece::GetColor() == PieceColor::White;
+}
+
 void Piece::SetFlag(PieceFlag flag, bool value) {
   uint8_t current = Piece::data & to_uint8(flag);
   Piece::data ^= current ^ value;

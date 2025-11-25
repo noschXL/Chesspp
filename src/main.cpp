@@ -1,5 +1,8 @@
 #include "Engine/BoardTypes.hpp"
+
 #include "Render/Renderer.hpp"
+#include "UI/BoardUI.hpp"
+
 #include "Engine/Fenparser.hpp"
 
 #include <iostream>
@@ -18,7 +21,7 @@ int main() {
   
   raylib::Window window(screenWidth, screenHeight, "raylib-cpp - basic window");
 
-  InitRenderer((cwd / "src/render/assets/pieces.png").string());
+  InitRenderer((cwd / "src/Render/assets/pieces.png").string());
   
   window.SetFullscreen(true);
 
@@ -29,10 +32,11 @@ int main() {
   while (!window.ShouldClose()) {
     // float deltatime = GetFrameTime();
     BeginDrawing();
-    
+
     window.ClearBackground(DARKGRAY);
     
     DrawAll(&window, board);
+    HandleMouse(board, boardRect, true);
 
     EndDrawing();
   }

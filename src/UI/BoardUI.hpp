@@ -13,4 +13,4 @@ void SelectPieceAt(float x, float y,
 
   void DrawDebug(std::string data, raylib::Rectangle boardrect);
 
-void HandleMouse(raylib::Rectangle boardRect, bool whiteToMove, std::vector<Move> Movelist);
+void HandleMouse(Board board, raylib::Rectangle boardRect, bool whiteToMove);

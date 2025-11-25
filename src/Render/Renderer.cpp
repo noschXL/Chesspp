@@ -3,8 +3,9 @@
 #include "Boardrender.hpp"
 #include "../Engine/BoardTypes.hpp"
 
-#include <iostream>
 #include <string>
+
+raylib::Rectangle boardRect;
 
 void InitRenderer(std::string texturepath) {
   InitPieceTexture(texturepath);

@@ -3,19 +3,19 @@
 #include <stdexcept>
 #include <string>
 
-const raylib::Color Whitesquare = {0x52311eff};
-const raylib::Color Blacksquare = {0xc59562ff};
-const raylib::Color Highlightsquare = {0xfbf236ff};
-const raylib::Color Movesquare = {0x306082ff};
-
-const raylib::Color White = {0xffffffff};
 
 static raylib::Texture2D pieceTexture;
+raylib::Texture2D* pieceTexturePtr = nullptr;
 bool textureinitialized = false;
 
 int pieceWidth = -1;
 int pieceHeight = -1;
 
+const raylib::Color BoardColors::White          = {0xffffffff};
+const raylib::Color BoardColors::WhiteSquare     = {0x52311eff};
+const raylib::Color BoardColors::BlackSquare     = {0xc59562ff};
+const raylib::Color BoardColors::HighlightSquare = {0xfbf236ff};
+const raylib::Color BoardColors::MoveSquare      = {0x306082ff};
 
 void InitPieceTexture(std::string path) {
   pieceTexture = raylib::Texture2D{path};
@@ -48,11 +48,11 @@ void DrawPiece(int index, raylib::Rectangle boardRect, Piece piece) {
   };
   
   if (piece.IsFlagSet(PieceFlag::Highlight)) {
-    DrawRectangleRec(drawAera, Highlightsquare);
+    DrawRectangleRec(drawAera, BoardColors::HighlightSquare);
   }
 
   if (piece.IsFlagSet(PieceFlag::CanMove)) {
-    DrawRectangleRec(drawAera, Movesquare);
+    DrawRectangleRec(drawAera, BoardColors::MoveSquare);
   }
 
   if (type == PieceType::Empty) {return;}
@@ -78,7 +78,7 @@ void DrawBoard(Board board, raylib::Rectangle boardRect) {
 
     int row = i / 8;
     int col = i % 8;
-    raylib::Color sqrcol = ((row + col) % 2 == 0) ? Blacksquare : Whitesquare;
+    raylib::Color sqrcol = ((row + col) % 2 == 0) ? BoardColors::BlackSquare : BoardColors::WhiteSquare;
     DrawRectangle(x, y, boardRect.width / 8, boardRect.height / 8, sqrcol);
 
     Piece piece = board.squares[i];
