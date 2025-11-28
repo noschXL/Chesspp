@@ -28,6 +28,7 @@ int main() {
   SetTargetFPS(60);
 
   Board board = to_board(startpos);
+  board.squares[63].SetFlag(PieceFlag::Highlight, true);
   
   while (!window.ShouldClose()) {
     // float deltatime = GetFrameTime();
@@ -36,7 +37,7 @@ int main() {
     window.ClearBackground(DARKGRAY);
     
     DrawAll(&window, board);
-    HandleMouse(board, boardRect, true);
+    HandleMouse(board, boardRect);
 
     EndDrawing();
   }

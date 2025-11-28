@@ -17,6 +17,11 @@ public:
   static const raylib::Color MoveSquare;
 };
 
+extern int pieceWidth;
+extern int pieceHeight;
+
 void InitPieceTexture(std::string path);
 void DrawBoard(Board board, raylib::Rectangle aera);
 void DrawPiece(int index, raylib::Rectangle boardRect, Piece piece);
+void DebugRect(raylib::Rectangle rect);
+void DebugVec(raylib::Vector2 vec);

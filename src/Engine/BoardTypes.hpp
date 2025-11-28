@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <array>
+#include <vector>
 
 
 enum class PieceType : uint8_t{
@@ -26,11 +27,21 @@ enum class PieceFlag {
   LastMoved = 0b10000000,
 };
 
-enum class MoveFlag {
-  Promotion = 0b1 << 15,
-  Capture = 0b1 << 14,
-  Special1 = 0b1 << 13,
-  Special2 = 0b1 << 12,
+enum class MoveFlag : uint16_t{
+  Quiet,
+  DoublePawnPush,
+  KingCastle,
+  QueenCastle,
+  Capture,
+  EnPassant,
+  KnightPromotion,
+  BishopPromotion,
+  RookPromotion,
+  QueenPromotion,
+  KnightPromotionCapture,
+  BishopPromotionCapture,
+  RookPromotionCapture,
+  QueenPromotionCapture,
 };
 
 inline uint8_t to_uint8(PieceType type) { return static_cast<uint8_t>(type)&0b00000111; }
@@ -65,14 +76,11 @@ class Move {
 
 public:
   Move(uint16_t data) : data(data) {}
-  Move(uint16_t from, uint16_t to, MoveFlag flags) : data(to_uint16(flags) | from << 6 | to) {}
+  Move(uint16_t from, uint16_t to, MoveFlag flags) : data(to_uint16(flags) << 12 | from << 6 | to) {}
 
   uint16_t GetFrom();
   uint16_t GetTo();
-  bool GetSpecial1();
-  bool GetSpecial2();
-  bool GetCapture();
-  bool GetPromotion();
+  MoveFlag GetFlag();
   
   void SetFrom(uint8_t idx);
   void SetTo(uint8_t idx);
@@ -81,13 +89,23 @@ public:
   void SetCapture(bool value);
   void SetPromotion(bool value);
 
+  bool IsCapture();
+
 };
+
+inline const Move ErrorMove = {0};
 
 struct Board {
   std::array<Piece, 64> squares;
-  std::array<bool, 4> Castelrights; //topleft -> bottomright
-  
+  std::array<bool, 4> castelrights; //topleft -> bottomright
+  std::vector<Move> moveHistory;
+  std::vector<Piece> captures;
+  bool whitesTurn;
+
   Board();
+
+  void MakeMove(Move move);
+  void UnMakeMove();
 
 };
 // look at notes.md

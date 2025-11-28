@@ -1,5 +1,6 @@
 #include "BoardTypes.hpp"
 #include <cstdint>
+#include <iostream>
 
 PieceType Piece::GetType() {
   return static_cast<PieceType>(Piece::data & 0b00000111);
@@ -21,7 +22,50 @@ void Piece::SetFlag(PieceFlag flag, bool value) {
   Piece::data ^= current ^ value;
 }
 
+uint16_t Move::GetFrom() {
+  return data >> 6 & 0b111111; 
+}
+
+uint16_t Move::GetTo() {
+  return data & 0b111111; 
+}
+
+MoveFlag Move::GetFlag() {
+  return (MoveFlag) (data >> 12 & 0b111111); 
+}
+
+bool Move::IsCapture() {
+  return data >> 14;
+}
+
 
 Board::Board() {
   squares.fill(Piece(to_uint8(PieceType::Empty)));
+  whitesTurn = true;
+}
+
+void Board::MakeMove(Move move) {
+  squares[move.GetTo()] = squares[move.GetFrom()];
+  squares[move.GetFrom()] = Piece();
+  moveHistory.push_back(move);
+}
+
+void Board::UnMakeMove() {
+  if (moveHistory.empty()) {
+    std::cout << "WARNING: Board with empty moveHistory called UnMakeMove, did nothing\n";
+    return;
+  }
+  Move move = moveHistory.back();
+  
+  Piece prevPiece;
+  if (move.IsCapture()) {
+    prevPiece = captures.back();
+    captures.pop_back();
+  }else{
+    prevPiece = Piece();
+  }
+
+  squares[move.GetFrom()] = squares[move.GetTo()];
+  squares[move.GetTo()] = prevPiece;
+
 }

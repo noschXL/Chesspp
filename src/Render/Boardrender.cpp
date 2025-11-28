@@ -2,7 +2,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <string>
-
+#include <iostream>
 
 static raylib::Texture2D pieceTexture;
 raylib::Texture2D* pieceTexturePtr = nullptr;
@@ -17,6 +17,27 @@ const raylib::Color BoardColors::BlackSquare     = {0xc59562ff};
 const raylib::Color BoardColors::HighlightSquare = {0xfbf236ff};
 const raylib::Color BoardColors::MoveSquare      = {0x306082ff};
 
+void DebugVec(raylib::Vector2 vec) {
+  std::cout
+  << "Vector2: "
+  << vec.x
+  << " "
+  << vec.y
+  << "\n";
+}
+
+void DebugRect(raylib::Rectangle rect) {
+  std::cout
+  << "Rect: "
+  << rect.x
+  << " "
+  << rect.y
+  << " "
+  << rect.width
+  << " "
+  << rect.height
+  << "\n";
+}
 void InitPieceTexture(std::string path) {
   pieceTexture = raylib::Texture2D{path};
   pieceTexture.GenMipmaps();
@@ -46,9 +67,12 @@ void DrawPiece(int index, raylib::Rectangle boardRect, Piece piece) {
     width,
     height,
   };
+ 
   
+
   if (piece.IsFlagSet(PieceFlag::Highlight)) {
     DrawRectangleRec(drawAera, BoardColors::HighlightSquare);
+    DebugRect(drawAera);
   }
 
   if (piece.IsFlagSet(PieceFlag::CanMove)) {

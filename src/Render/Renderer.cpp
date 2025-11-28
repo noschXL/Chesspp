@@ -18,11 +18,8 @@ void DrawAll(raylib::Window* window, Board board) {
   int largest = fmax(w,h);
   int smallest = fmin(w,h);
 
-
-  raylib::Rectangle boardrect;
-  
   if (smallest == h) {
-    boardrect = raylib::Rectangle{
+    boardRect = raylib::Rectangle{
       float(largest - smallest) / 2,
       0,
       float(smallest),
@@ -30,7 +27,7 @@ void DrawAll(raylib::Window* window, Board board) {
     };
   
   }else{
-    boardrect = raylib::Rectangle{
+    boardRect = raylib::Rectangle{
       0,
       float(largest - smallest) / 2,
       float(smallest),
@@ -39,5 +36,5 @@ void DrawAll(raylib::Window* window, Board board) {
   
   }
 
-  DrawBoard(board, boardrect);
+  DrawBoard(board, boardRect);
 }
