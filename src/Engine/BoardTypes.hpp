@@ -89,17 +89,39 @@ public:
   void SetCapture(bool value);
   void SetPromotion(bool value);
 
+  bool operator==(Move m);
+  bool operator!=(Move m);
+
   bool IsCapture();
 
 };
 
 inline const Move ErrorMove = {0};
 
+enum BitBoard {
+  Pawn,
+  Bishop,
+  Knight,
+  Rook,
+  Queen,
+  King,
+  White,
+  Black,
+};
+
+class BitMasks {
+  uint64_t Row = 0b11111111;
+  uint64_t Column = 0x8080808080808080;
+};
+
+typedef std::vector<Move> MoveList;
+
 struct Board {
   std::array<Piece, 64> squares;
   std::array<bool, 4> castelrights; //topleft -> bottomright
-  std::vector<Move> moveHistory;
+  MoveList moveHistory;
   std::vector<Piece> captures;
+  std::array<uint64_t, 9> bitboards;
   bool whitesTurn;
 
   Board();

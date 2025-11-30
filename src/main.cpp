@@ -19,7 +19,7 @@ int main() {
   std::cout << cwd << "\n";
 
   
-  raylib::Window window(screenWidth, screenHeight, "raylib-cpp - basic window");
+  raylib::Window window(screenWidth, screenHeight, "Chesspp");
 
   InitRenderer((cwd / "src/Render/assets/pieces.png").string());
   
@@ -28,7 +28,6 @@ int main() {
   SetTargetFPS(60);
 
   Board board = to_board(startpos);
-  board.squares[63].SetFlag(PieceFlag::Highlight, true);
   
   while (!window.ShouldClose()) {
     // float deltatime = GetFrameTime();
@@ -37,7 +36,18 @@ int main() {
     window.ClearBackground(DARKGRAY);
     
     DrawAll(&window, board);
-    HandleMouse(board, boardRect);
+    Move m = HandleMouse(board, boardRect);
+
+    if (m != ErrorMove) {
+      board.MakeMove(m);
+    }
+
+    bool zPressed = raylib::Keyboard::IsKeyPressed(KEY_Y); // Letter Y cuz of kb layout
+    bool ctrlDown = raylib::Keyboard::IsKeyDown(KEY_LEFT_CONTROL);
+
+    if (zPressed && ctrlDown){
+      board.UnMakeMove();
+    }
 
     EndDrawing();
   }

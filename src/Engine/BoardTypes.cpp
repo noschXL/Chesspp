@@ -38,6 +38,14 @@ bool Move::IsCapture() {
   return data >> 14;
 }
 
+bool Move::operator==(Move m) {
+  return this->data == m.data;
+}
+
+bool Move::operator!=(Move m) {
+  return !(this->data == m.data);
+}
+
 
 Board::Board() {
   squares.fill(Piece(to_uint8(PieceType::Empty)));
@@ -52,7 +60,7 @@ void Board::MakeMove(Move move) {
 
 void Board::UnMakeMove() {
   if (moveHistory.empty()) {
-    std::cout << "WARNING: Board with empty moveHistory called UnMakeMove, did nothing\n";
+    std::cerr << "WARNING: Board with empty moveHistory called UnMakeMove, did nothing\n";
     return;
   }
   Move move = moveHistory.back();
@@ -64,6 +72,7 @@ void Board::UnMakeMove() {
   }else{
     prevPiece = Piece();
   }
+  moveHistory.pop_back();
 
   squares[move.GetFrom()] = squares[move.GetTo()];
   squares[move.GetTo()] = prevPiece;

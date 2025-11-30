@@ -72,7 +72,6 @@ void DrawPiece(int index, raylib::Rectangle boardRect, Piece piece) {
 
   if (piece.IsFlagSet(PieceFlag::Highlight)) {
     DrawRectangleRec(drawAera, BoardColors::HighlightSquare);
-    DebugRect(drawAera);
   }
 
   if (piece.IsFlagSet(PieceFlag::CanMove)) {
