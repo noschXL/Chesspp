@@ -3,6 +3,7 @@
 #include "../../include/raylib-cpp.hpp"
 #include "../Engine/BoardTypes.hpp"
 
+#include <cstdint>
 #include <string>
 
 extern bool textureinitialized; 
@@ -15,6 +16,7 @@ public:
   static const raylib::Color BlackSquare;
   static const raylib::Color HighlightSquare;
   static const raylib::Color MoveSquare;
+  static const raylib::Color Blue;
 };
 
 extern int pieceWidth;
@@ -25,3 +27,5 @@ void DrawBoard(Board board, raylib::Rectangle aera);
 void DrawPiece(int index, raylib::Rectangle boardRect, Piece piece);
 void DebugRect(raylib::Rectangle rect);
 void DebugVec(raylib::Vector2 vec);
+void DrawAllBitBoardOverlays(uint64_t bitboard);
+void QueueBitBoardRender(uint64_t bitboard);

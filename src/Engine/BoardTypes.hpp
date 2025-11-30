@@ -47,7 +47,7 @@ enum class MoveFlag : uint16_t{
 inline uint8_t to_uint8(PieceType type) { return static_cast<uint8_t>(type)&0b00000111; }
 inline uint8_t to_uint8(PieceColor color) { return static_cast<uint8_t>(color)&0b00001000; }
 inline uint8_t to_uint8(PieceFlag flag) { return static_cast<uint8_t>(flag)&0b11110000; }
-inline uint8_t to_uint16(MoveFlag flag) { return static_cast<uint16_t>(flag); }
+inline uint16_t to_uint16(MoveFlag flag) { return static_cast<uint16_t>(flag); }
 
 class Piece { 
   uint8_t data;
@@ -109,10 +109,14 @@ enum BitBoard {
   Black,
 };
 
-class BitMasks {
-  uint64_t Row = 0b11111111;
-  uint64_t Column = 0x8080808080808080;
+
+enum class BitMasks : uint64_t{
+  Row = 0b11111111,
+  Column = 0x8080808080808080,
+  First = 0b1ULL << 63,
 };
+
+inline uint64_t to_ull(BitMasks bb) { return static_cast<uint64_t>(bb); }
 
 typedef std::vector<Move> MoveList;
 

@@ -1,6 +1,7 @@
 #include "BoardTypes.hpp"
 #include <cstdint>
 #include <iostream>
+#include <stdexcept>
 
 PieceType Piece::GetType() {
   return static_cast<PieceType>(Piece::data & 0b00000111);
@@ -53,6 +54,44 @@ Board::Board() {
 }
 
 void Board::MakeMove(Move move) {
+
+  Piece* piece = &squares[move.GetFrom()];
+
+
+  BitBoard color = piece->GetColor() == PieceColor::White ? BitBoard::White : BitBoard::Black;
+  uint64_t cbitboard = bitboards[color];
+
+  cbitboard &= ~(to_ull(BitMasks::First) >> move.GetFrom());
+  cbitboard |= to_ull(BitMasks::First) >> move.GetTo();
+
+  bitboards[color] = cbitboard;
+
+  BitBoard pb;
+
+  switch (piece->GetType()) {
+    case PieceType::Pawn:
+      pb = BitBoard::Pawn;
+    case PieceType::Bishop:
+      pb = BitBoard::Bishop;
+    case PieceType::Knight:
+      pb = BitBoard::Knight;
+    case PieceType::Rook:
+      pb = BitBoard::Rook;
+    case PieceType::Queen:
+      pb = BitBoard::Queen;
+    case PieceType::King:
+      pb = BitBoard::King;
+    default:
+      throw std::runtime_error("well, you moved an empty Square, good job Mr. Dumbass!");
+  }
+  
+  uint64_t pbitboard = bitboards[pb];
+
+  pbitboard &= ~(to_ull(BitMasks::First) >> move.GetFrom());
+  pbitboard |= to_ull(BitMasks::First) >> move.GetTo();
+
+  bitboards[pb] = pbitboard;
+
   squares[move.GetTo()] = squares[move.GetFrom()];
   squares[move.GetFrom()] = Piece();
   moveHistory.push_back(move);
@@ -72,6 +111,42 @@ void Board::UnMakeMove() {
   }else{
     prevPiece = Piece();
   }
+  Piece* piece = &squares[move.GetTo()];
+
+
+  BitBoard color = piece->GetColor() == PieceColor::White ? BitBoard::White : BitBoard::Black;
+  uint64_t cbitboard = bitboards[color];
+
+  cbitboard &= ~(to_ull(BitMasks::First) >> move.GetFrom());
+  cbitboard |= to_ull(BitMasks::First) >> move.GetTo();
+
+  bitboards[color] = cbitboard;
+
+  BitBoard pb;
+
+  switch (piece->GetType()) {
+    case PieceType::Pawn:
+      pb = BitBoard::Pawn;
+    case PieceType::Bishop:
+      pb = BitBoard::Bishop;
+    case PieceType::Knight:
+      pb = BitBoard::Knight;
+    case PieceType::Rook:
+      pb = BitBoard::Rook;
+    case PieceType::Queen:
+      pb = BitBoard::Queen;
+    case PieceType::King:
+      pb = BitBoard::King;
+    default:
+      throw std::runtime_error("well, you moved an empty Square, good job Mr. Dumbass!");
+  }
+  
+  uint64_t pbitboard = bitboards[pb];
+
+  pbitboard &= ~(to_ull(BitMasks::First) >> move.GetTo());
+  pbitboard |= to_ull(BitMasks::First) >> move.GetFrom();
+
+  bitboards[pb] = pbitboard;
   moveHistory.pop_back();
 
   squares[move.GetFrom()] = squares[move.GetTo()];

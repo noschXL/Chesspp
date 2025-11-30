@@ -1,8 +1,13 @@
 #include "Boardrender.hpp"
 #include <cmath>
+#include <cstdint>
 #include <stdexcept>
 #include <string>
 #include <iostream>
+#include <sys/types.h>
+#include <vector>
+
+static std::vector<uint64_t> bitboardQueue;
 
 static raylib::Texture2D pieceTexture;
 raylib::Texture2D* pieceTexturePtr = nullptr;
@@ -16,6 +21,7 @@ const raylib::Color BoardColors::WhiteSquare     = {0x52311eff};
 const raylib::Color BoardColors::BlackSquare     = {0xc59562ff};
 const raylib::Color BoardColors::HighlightSquare = {0xfbf236ff};
 const raylib::Color BoardColors::MoveSquare      = {0x306082ff};
+const raylib::Color BoardColors::Blue            = {0x5fcde4aa};
 
 void DebugVec(raylib::Vector2 vec) {
   std::cout
@@ -38,6 +44,33 @@ void DebugRect(raylib::Rectangle rect) {
   << rect.height
   << "\n";
 }
+
+void QueueBitBoardRender(uint64_t bitboard) {
+  bitboardQueue.push_back(bitboard);
+}
+
+void DrawBitBoard(raylib::Rectangle boardRect, uint64_t bitboard) {
+  for (int i = 0; i < 64; i++) {
+    if (!bitboard >> i & 1) {continue;}
+    
+    raylib::Rectangle sqrRect = {
+      boardRect.x + boardRect.width / 8 * (i % 8),
+      boardRect.y + boardRect.height / 8 * (i / 8),
+      boardRect.width / 8,
+      boardRect.height / 8,
+    };
+
+    DrawRectangleRec(sqrRect, BoardColors::Blue);
+
+  }
+}
+
+void DrawAllBitboardOverlays (raylib::Rectangle boardRect) {
+  for (uint64_t bb: bitboardQueue) {
+    DrawBitBoard(boardRect, bb);
+  }
+}
+
 void InitPieceTexture(std::string path) {
   pieceTexture = raylib::Texture2D{path};
   pieceTexture.GenMipmaps();
