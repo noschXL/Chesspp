@@ -112,7 +112,7 @@ enum BitBoard {
 
 enum class BitMasks : uint64_t{
   Row = 0b11111111,
-  Column = 0x8080808080808080,
+  Column = 0x0101010101010101,
   //First = 0b1ULL << 63,
   First = 0b1
 };

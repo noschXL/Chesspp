@@ -6,6 +6,9 @@
 
 #include "Engine/Fenparser.hpp"
 
+//TMP
+#include "Engine/MoveCalc.hpp"
+
 #include <iostream>
 #include <filesystem>
 
@@ -37,8 +40,9 @@ int main() {
     BeginDrawing();
 
     window.ClearBackground(DARKGRAY);
-    QueueBitBoardRender(board.bitboards[BitBoard::White] & board.bitboards[BitBoard::Pawn]);
-    
+     
+    GenerateRookMoves(board, 27);
+
     DrawAll(&window, board);
     Move m = HandleMouse(board, boardRect);
 
