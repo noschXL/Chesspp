@@ -113,10 +113,13 @@ enum BitBoard {
 enum class BitMasks : uint64_t{
   Row = 0b11111111,
   Column = 0x8080808080808080,
-  First = 0b1ULL << 63,
+  //First = 0b1ULL << 63,
+  First = 0b1
 };
 
 inline uint64_t to_ull(BitMasks bb) { return static_cast<uint64_t>(bb); }
+
+std::array<BitBoard, 2> GetPieceBitBoards(Piece* piece);
 
 typedef std::vector<Move> MoveList;
 

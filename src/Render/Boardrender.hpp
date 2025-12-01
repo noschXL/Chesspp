@@ -23,9 +23,13 @@ extern int pieceWidth;
 extern int pieceHeight;
 
 void InitPieceTexture(std::string path);
+
 void DrawBoard(Board board, raylib::Rectangle aera);
 void DrawPiece(int index, raylib::Rectangle boardRect, Piece piece);
+
 void DebugRect(raylib::Rectangle rect);
 void DebugVec(raylib::Vector2 vec);
-void DrawAllBitBoardOverlays(uint64_t bitboard);
+void DebugBitBoard(uint64_t bb);
+
+void DrawAllBitBoardOverlays(raylib::Rectangle boardRect);
 void QueueBitBoardRender(uint64_t bitboard);

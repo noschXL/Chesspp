@@ -45,13 +45,24 @@ void DebugRect(raylib::Rectangle rect) {
   << "\n";
 }
 
+void DebugBitBoard(uint64_t bb) {
+  std::cout << (bb >> 56 & 0xFF) << "\n"
+            << (bb >> 48 & 0xFF) << "\n"
+            << (bb >> 40 & 0xFF) << "\n"
+            << (bb >> 32 & 0xFF) << "\n"
+            << (bb >> 24 & 0xFF) << "\n"
+            << (bb >> 16 & 0xFF) << "\n"
+            << (bb >> 8 & 0xFF) << "\n"
+            << (bb >> 0 & 0xFF) << "\n";
+}
+
 void QueueBitBoardRender(uint64_t bitboard) {
   bitboardQueue.push_back(bitboard);
 }
 
 void DrawBitBoard(raylib::Rectangle boardRect, uint64_t bitboard) {
   for (int i = 0; i < 64; i++) {
-    if (!bitboard >> i & 1) {continue;}
+    if (!(bitboard >> i & 0b1)) {continue;}
     
     raylib::Rectangle sqrRect = {
       boardRect.x + boardRect.width / 8 * (i % 8),
@@ -65,10 +76,14 @@ void DrawBitBoard(raylib::Rectangle boardRect, uint64_t bitboard) {
   }
 }
 
-void DrawAllBitboardOverlays (raylib::Rectangle boardRect) {
+void DrawAllBitBoardOverlays (raylib::Rectangle boardRect) {
   for (uint64_t bb: bitboardQueue) {
     DrawBitBoard(boardRect, bb);
   }
+
+  while (!bitboardQueue.empty()) {bitboardQueue.pop_back();}
+
+
 }
 
 void InitPieceTexture(std::string path) {

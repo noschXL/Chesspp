@@ -13,7 +13,6 @@ Board to_board(Fenstring fen) {
   std::cout << fen << "\n";
   for (ulong i = 0; i < fen.size(); i++) {
     char currentchar = fen[i];
-    std::cout << currentchar << "\n";
     if (currentchar ==  '/') {
       continue;
     }
@@ -64,7 +63,15 @@ Board to_board(Fenstring fen) {
 
     board.squares[idx] = piece;
 
-    std::cout << idx << "\n";
+    auto bb = GetPieceBitBoards(&piece);
+
+    board.bitboards[bb[0]] |= to_ull(BitMasks::First) << idx;
+    if (bb[0] == BitBoard::White) {
+      std::cout << idx << "\n";
+    }
+
+    board.bitboards[bb[1]] |= to_ull(BitMasks::First) << idx;
+
     idx++;
   }
 

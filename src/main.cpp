@@ -1,5 +1,6 @@
 #include "Engine/BoardTypes.hpp"
 
+#include "Render/Boardrender.hpp"
 #include "Render/Renderer.hpp"
 #include "UI/BoardUI.hpp"
 
@@ -28,12 +29,15 @@ int main() {
   SetTargetFPS(60);
 
   Board board = to_board(startpos);
+
+  DebugBitBoard(board.bitboards[BitBoard::White]);
   
   while (!window.ShouldClose()) {
     // float deltatime = GetFrameTime();
     BeginDrawing();
 
     window.ClearBackground(DARKGRAY);
+    QueueBitBoardRender(board.bitboards[BitBoard::White] & board.bitboards[BitBoard::Pawn]);
     
     DrawAll(&window, board);
     Move m = HandleMouse(board, boardRect);

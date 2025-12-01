@@ -37,4 +37,5 @@ void DrawAll(raylib::Window* window, Board board) {
   }
 
   DrawBoard(board, boardRect);
+  DrawAllBitBoardOverlays(boardRect);
 }

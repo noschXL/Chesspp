@@ -36,7 +36,7 @@ MoveFlag Move::GetFlag() {
 }
 
 bool Move::IsCapture() {
-  return data >> 14;
+  return data >> 14 & 1;
 }
 
 bool Move::operator==(Move m) {
@@ -49,48 +49,69 @@ bool Move::operator!=(Move m) {
 
 
 Board::Board() {
-  squares.fill(Piece(to_uint8(PieceType::Empty)));
+  squares.fill(Piece());
+  bitboards.fill(0ULL);
   whitesTurn = true;
+}
+
+std::array<BitBoard, 2> GetPieceBitBoards(Piece* piece) {
+  std::array<BitBoard, 2> returnvalue;
+  
+  BitBoard pb;
+
+  switch (piece->GetType()) {
+    case PieceType::Pawn:
+      pb = BitBoard::Pawn;
+      break;
+    case PieceType::Bishop:
+      pb = BitBoard::Bishop;
+      break;
+    case PieceType::Knight:
+      pb = BitBoard::Knight;
+      break;
+    case PieceType::Rook:
+      pb = BitBoard::Rook;
+      break;
+    case PieceType::Queen:
+      pb = BitBoard::Queen;
+      break;
+    case PieceType::King:
+      pb = BitBoard::King;
+      break;
+    default:
+      throw std::runtime_error("well, you moved an empty Square, good job Mr. Dumbass!");
+  }
+  
+  BitBoard color = piece->GetColor() == PieceColor::White ? BitBoard::White : BitBoard::Black;
+
+  returnvalue[0] = color;
+  returnvalue[1] = pb;
+
+  return returnvalue;
 }
 
 void Board::MakeMove(Move move) {
 
   Piece* piece = &squares[move.GetFrom()];
 
+  auto pieceBitboards = GetPieceBitBoards(piece);
 
-  BitBoard color = piece->GetColor() == PieceColor::White ? BitBoard::White : BitBoard::Black;
+  BitBoard color = pieceBitboards[0];
+  BitBoard pb = pieceBitboards[1];
+
   uint64_t cbitboard = bitboards[color];
-
-  cbitboard &= ~(to_ull(BitMasks::First) >> move.GetFrom());
-  cbitboard |= to_ull(BitMasks::First) >> move.GetTo();
-
+  cbitboard &= ~(to_ull(BitMasks::First) << move.GetFrom());
+  cbitboard |= to_ull(BitMasks::First) << move.GetTo();
   bitboards[color] = cbitboard;
 
-  BitBoard pb;
 
-  switch (piece->GetType()) {
-    case PieceType::Pawn:
-      pb = BitBoard::Pawn;
-    case PieceType::Bishop:
-      pb = BitBoard::Bishop;
-    case PieceType::Knight:
-      pb = BitBoard::Knight;
-    case PieceType::Rook:
-      pb = BitBoard::Rook;
-    case PieceType::Queen:
-      pb = BitBoard::Queen;
-    case PieceType::King:
-      pb = BitBoard::King;
-    default:
-      throw std::runtime_error("well, you moved an empty Square, good job Mr. Dumbass!");
-  }
-  
+
   uint64_t pbitboard = bitboards[pb];
-
-  pbitboard &= ~(to_ull(BitMasks::First) >> move.GetFrom());
-  pbitboard |= to_ull(BitMasks::First) >> move.GetTo();
-
+  pbitboard &= ~(to_ull(BitMasks::First) << move.GetFrom());
+  pbitboard |= to_ull(BitMasks::First) << move.GetTo();
   bitboards[pb] = pbitboard;
+
+
 
   squares[move.GetTo()] = squares[move.GetFrom()];
   squares[move.GetFrom()] = Piece();
@@ -103,53 +124,58 @@ void Board::UnMakeMove() {
     return;
   }
   Move move = moveHistory.back();
-  
-  Piece prevPiece;
-  if (move.IsCapture()) {
-    prevPiece = captures.back();
-    captures.pop_back();
-  }else{
-    prevPiece = Piece();
-  }
   Piece* piece = &squares[move.GetTo()];
 
+  // ----- BITBOARDS -------
 
-  BitBoard color = piece->GetColor() == PieceColor::White ? BitBoard::White : BitBoard::Black;
+  auto pieceBitboards = GetPieceBitBoards(piece);
+
+  BitBoard color = pieceBitboards[0];
+  BitBoard pb = pieceBitboards[1];
+
   uint64_t cbitboard = bitboards[color];
-
-  cbitboard &= ~(to_ull(BitMasks::First) >> move.GetFrom());
-  cbitboard |= to_ull(BitMasks::First) >> move.GetTo();
-
+  cbitboard &= ~(to_ull(BitMasks::First) << move.GetTo());
+  cbitboard |= to_ull(BitMasks::First) << move.GetFrom();
   bitboards[color] = cbitboard;
 
-  BitBoard pb;
 
-  switch (piece->GetType()) {
-    case PieceType::Pawn:
-      pb = BitBoard::Pawn;
-    case PieceType::Bishop:
-      pb = BitBoard::Bishop;
-    case PieceType::Knight:
-      pb = BitBoard::Knight;
-    case PieceType::Rook:
-      pb = BitBoard::Rook;
-    case PieceType::Queen:
-      pb = BitBoard::Queen;
-    case PieceType::King:
-      pb = BitBoard::King;
-    default:
-      throw std::runtime_error("well, you moved an empty Square, good job Mr. Dumbass!");
-  }
-  
   uint64_t pbitboard = bitboards[pb];
-
-  pbitboard &= ~(to_ull(BitMasks::First) >> move.GetTo());
-  pbitboard |= to_ull(BitMasks::First) >> move.GetFrom();
-
+  pbitboard &= ~(to_ull(BitMasks::First) << move.GetTo());
+  pbitboard |= to_ull(BitMasks::First) << move.GetFrom();
   bitboards[pb] = pbitboard;
-  moveHistory.pop_back();
+
+  // ------ END BITBOARDS -------
 
   squares[move.GetFrom()] = squares[move.GetTo()];
-  squares[move.GetTo()] = prevPiece;
+  squares[move.GetTo()] = Piece();
+  moveHistory.pop_back();
+  
+
+  
+  if (move.IsCapture()) {
+    Piece* prevPiece;
+    prevPiece = &captures.back();
+    captures.pop_back();
+    squares[move.GetFrom()] = *prevPiece;
+    
+    // ----- BITBOARDS -------
+
+    auto pieceBitboards = GetPieceBitBoards(prevPiece);
+
+    BitBoard color = pieceBitboards[0];
+    BitBoard pb = pieceBitboards[1];
+
+    uint64_t cbitboard = bitboards[color];
+    cbitboard |= to_ull(BitMasks::First) << move.GetFrom();
+    bitboards[color] = cbitboard;
+
+
+    uint64_t pbitboard = bitboards[pb];
+    pbitboard |= to_ull(BitMasks::First) << move.GetFrom();
+    bitboards[pb] = pbitboard;
+
+    // ------ END BITBOARDS -------
+
+  }
 
 }
